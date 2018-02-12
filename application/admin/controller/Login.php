@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 use think\View;
+use think\Request;
 
 class Login extends Controller
 {
@@ -40,22 +41,22 @@ class Login extends Controller
      * @access public
      * @return void
      */
-    public function check_login()
+    public function checkLogin()
     {
         if(request()->isPost()){
             $data = input('post.');
-            if(!$data['name']) {
+            if(!$data['username']) {
                 return json_encode(['status'=>0,'msg'=>'用户名错误']);
             }
-            if(!$data['passwd']) {
+            if(!$data['password']) {
                 return json_encode(['status'=>0, 'msg'=>'密码错误']);
             }
-            $user = Db::table('user')->where('name', $data['name'])->find();
+            $user = Db::table('user')->where('name', $data['username'])->find();
             if(!$user) {
                 return json_encode(['status'=>0, 'msg'=>'用户不存在']);
             }else{
                 $json = [];
-                if($user['passwd'] != md5($data['passwd'])){
+                if($user['passwd'] != md5($data['password'])){
                     return json_encode(['status'=>0, 'msg'=>'密码错误']);
                 }else{
                     $json = ['status'=>1, 'msg'=>'登录成功', 'url'=>url('Index/index')];
@@ -70,6 +71,15 @@ class Login extends Controller
                     cookie('remember', 0);
                 }
                 return json_encode($json);
+            }
+        }
+    }
+
+    public function checkRegister()
+    {
+        if(Request::instance()->isPost()) {
+            if( !Request::instance()->has('username') || !Request::instance()->has('password') || !Request::instance()->has('rpassword')) {
+                return json_encode(['code'=>400,'msg'=>'参数错误','data'=> new \stdClass]);
             }
         }
     }

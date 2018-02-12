@@ -63,6 +63,7 @@ var SnippetLogin = function() {
         });
     }
 
+    //  登陆表单提交
     var handleSignInFormSubmit = function() {
         $('#m_login_signin_submit').click(function(e) {
             e.preventDefault();
@@ -100,6 +101,7 @@ var SnippetLogin = function() {
         });
     }
 
+    //  注册表单提交
     var handleSignUpFormSubmit = function() {
         $('#m_login_signup_submit').click(function(e) {
             e.preventDefault();
@@ -109,12 +111,8 @@ var SnippetLogin = function() {
 
             form.validate({
                 rules: {
-                    fullname: {
-                        required: true
-                    },
-                    email: {
+                    username: {
                         required: true,
-                        email: true
                     },
                     password: {
                         required: true
@@ -122,9 +120,6 @@ var SnippetLogin = function() {
                     rpassword: {
                         required: true
                     },
-                    agree: {
-                        required: true
-                    }
                 }
             });
 
@@ -135,7 +130,7 @@ var SnippetLogin = function() {
             btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
 
             form.ajaxSubmit({
-                url: '',
+                url: "{:url('admin/login/checkRegister')}",
                 success: function(response, status, xhr, $form) {
                 	// similate 2s delay
                 	setTimeout(function() {
